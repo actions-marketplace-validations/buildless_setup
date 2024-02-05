@@ -47,8 +47,8 @@ devDependencies:
     specifier: ^29.5.10
     version: registry.npmjs.org/@types/jest@29.5.10
   '@types/node':
-    specifier: ^20.10.0
-    version: registry.npmjs.org/@types/node@20.10.1
+    specifier: ^20.11.16
+    version: 20.11.16
   '@typescript-eslint/eslint-plugin':
     specifier: ^6.12.0
     version: registry.npmjs.org/@typescript-eslint/eslint-plugin@6.13.1(@typescript-eslint/parser@6.13.1)(eslint@8.54.0)(typescript@5.3.2)
@@ -84,7 +84,7 @@ devDependencies:
     version: registry.npmjs.org/eslint-plugin-prettier@5.0.1(eslint-config-prettier@9.0.0)(eslint@8.54.0)(prettier@3.1.0)
   jest:
     specifier: ^29.7.0
-    version: registry.npmjs.org/jest@29.7.0(@types/node@20.10.1)
+    version: registry.npmjs.org/jest@29.7.0(@types/node@20.11.16)
   jest-sonar-reporter:
     specifier: ^2.0.0
     version: registry.npmjs.org/jest-sonar-reporter@2.0.0
@@ -108,6 +108,76 @@ devDependencies:
     version: registry.npmjs.org/typescript@5.3.2
 
 packages:
+
+  /@bufbuild/buf-darwin-arm64@1.28.1:
+    resolution: {integrity: sha512-nAyvwKkcd8qQTExCZo5MtSRhXLK7e3vzKFKHjXfkveRakSUST2HFlFZAHfErZimN4wBrPTN0V0hNRU8PPjkMpQ==, tarball: https://registry.npmjs.org/@bufbuild/buf-darwin-arm64/-/buf-darwin-arm64-1.28.1.tgz}
+    engines: {node: '>=12'}
+    cpu: [arm64]
+    os: [darwin]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@bufbuild/buf-darwin-x64@1.28.1:
+    resolution: {integrity: sha512-b0eT3xd3vX5a5lWAbo5h7FPuf9MsOJI4I39qs4TZnrlZ8BOuPfqzwzijiFf9UCwaX2vR1NQXexIoQ80Ci+fCHw==, tarball: https://registry.npmjs.org/@bufbuild/buf-darwin-x64/-/buf-darwin-x64-1.28.1.tgz}
+    engines: {node: '>=12'}
+    cpu: [x64]
+    os: [darwin]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@bufbuild/buf-linux-aarch64@1.28.1:
+    resolution: {integrity: sha512-p5h9bZCVLMh8No9/7k7ulXzsFx5P7Lu6DiUMjSJ6aBXPMYo6Xl7r/6L2cQkpsZ53HMtIxCgMYS9a7zoS4K8wIw==, tarball: https://registry.npmjs.org/@bufbuild/buf-linux-aarch64/-/buf-linux-aarch64-1.28.1.tgz}
+    engines: {node: '>=12'}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@bufbuild/buf-linux-x64@1.28.1:
+    resolution: {integrity: sha512-fVJ3DiRigIso06jgEl+JNp59Y5t2pxDHd10d3SA4r+14sXbZ2J7Gy/wBqVXPry4x/jW567KKlvmhg7M5ZBgCQQ==, tarball: https://registry.npmjs.org/@bufbuild/buf-linux-x64/-/buf-linux-x64-1.28.1.tgz}
+    engines: {node: '>=12'}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@bufbuild/buf-win32-arm64@1.28.1:
+    resolution: {integrity: sha512-KJiRJpugQRK/jXC46Xjlb68UydWhCZj2jHdWLIwNtgXd1WTJ3LngChZV7Y6pPK08pwBAVz0JYeVbD5IlTCD4TQ==, tarball: https://registry.npmjs.org/@bufbuild/buf-win32-arm64/-/buf-win32-arm64-1.28.1.tgz}
+    engines: {node: '>=12'}
+    cpu: [arm64]
+    os: [win32]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@bufbuild/buf-win32-x64@1.28.1:
+    resolution: {integrity: sha512-vMnc+7OVCkmlRWQsgYHgUqiBPRIjD8XeoRyApJ07YZzGs7DkRH4LhvmacJbLd3wORylbn6gLz3pQa8J/M61mzg==, tarball: https://registry.npmjs.org/@bufbuild/buf-win32-x64/-/buf-win32-x64-1.28.1.tgz}
+    engines: {node: '>=12'}
+    cpu: [x64]
+    os: [win32]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@types/node@20.11.16:
+    resolution: {integrity: sha512-gKb0enTmRCzXSSUJDq6/sPcqrfCv2mkkG6Jt/clpn5eiCbKTY+SgZUxo+p8ZKMof5dCp9vHQUAB7wOUTod22wQ==, tarball: https://registry.npmjs.org/@types/node/-/node-20.11.16.tgz}
+    dependencies:
+      undici-types: 5.26.5
+
+  /fsevents@2.3.3:
+    resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==, tarball: https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz}
+    engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /undici-types@5.26.5:
+    resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==, tarball: https://registry.npmjs.org/undici-types/-/undici-types-5.26.5.tgz}
 
   registry.npmjs.org/@aashutoshrathi/word-wrap@1.2.6:
     resolution: {integrity: sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==, registry: https://npm.pkg.st/, tarball: https://registry.npmjs.org/@aashutoshrathi/word-wrap/-/word-wrap-1.2.6.tgz}
@@ -609,72 +679,6 @@ packages:
     version: 0.2.3
     dev: true
 
-  registry.npmjs.org/@bufbuild/buf-darwin-arm64@1.28.1:
-    resolution: {integrity: sha512-nAyvwKkcd8qQTExCZo5MtSRhXLK7e3vzKFKHjXfkveRakSUST2HFlFZAHfErZimN4wBrPTN0V0hNRU8PPjkMpQ==, registry: https://npm.pkg.st/, tarball: https://registry.npmjs.org/@bufbuild/buf-darwin-arm64/-/buf-darwin-arm64-1.28.1.tgz}
-    name: '@bufbuild/buf-darwin-arm64'
-    version: 1.28.1
-    engines: {node: '>=12'}
-    cpu: [arm64]
-    os: [darwin]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  registry.npmjs.org/@bufbuild/buf-darwin-x64@1.28.1:
-    resolution: {integrity: sha512-b0eT3xd3vX5a5lWAbo5h7FPuf9MsOJI4I39qs4TZnrlZ8BOuPfqzwzijiFf9UCwaX2vR1NQXexIoQ80Ci+fCHw==, registry: https://npm.pkg.st/, tarball: https://registry.npmjs.org/@bufbuild/buf-darwin-x64/-/buf-darwin-x64-1.28.1.tgz}
-    name: '@bufbuild/buf-darwin-x64'
-    version: 1.28.1
-    engines: {node: '>=12'}
-    cpu: [x64]
-    os: [darwin]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  registry.npmjs.org/@bufbuild/buf-linux-aarch64@1.28.1:
-    resolution: {integrity: sha512-p5h9bZCVLMh8No9/7k7ulXzsFx5P7Lu6DiUMjSJ6aBXPMYo6Xl7r/6L2cQkpsZ53HMtIxCgMYS9a7zoS4K8wIw==, registry: https://npm.pkg.st/, tarball: https://registry.npmjs.org/@bufbuild/buf-linux-aarch64/-/buf-linux-aarch64-1.28.1.tgz}
-    name: '@bufbuild/buf-linux-aarch64'
-    version: 1.28.1
-    engines: {node: '>=12'}
-    cpu: [arm64]
-    os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  registry.npmjs.org/@bufbuild/buf-linux-x64@1.28.1:
-    resolution: {integrity: sha512-fVJ3DiRigIso06jgEl+JNp59Y5t2pxDHd10d3SA4r+14sXbZ2J7Gy/wBqVXPry4x/jW567KKlvmhg7M5ZBgCQQ==, registry: https://npm.pkg.st/, tarball: https://registry.npmjs.org/@bufbuild/buf-linux-x64/-/buf-linux-x64-1.28.1.tgz}
-    name: '@bufbuild/buf-linux-x64'
-    version: 1.28.1
-    engines: {node: '>=12'}
-    cpu: [x64]
-    os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  registry.npmjs.org/@bufbuild/buf-win32-arm64@1.28.1:
-    resolution: {integrity: sha512-KJiRJpugQRK/jXC46Xjlb68UydWhCZj2jHdWLIwNtgXd1WTJ3LngChZV7Y6pPK08pwBAVz0JYeVbD5IlTCD4TQ==, registry: https://npm.pkg.st/, tarball: https://registry.npmjs.org/@bufbuild/buf-win32-arm64/-/buf-win32-arm64-1.28.1.tgz}
-    name: '@bufbuild/buf-win32-arm64'
-    version: 1.28.1
-    engines: {node: '>=12'}
-    cpu: [arm64]
-    os: [win32]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  registry.npmjs.org/@bufbuild/buf-win32-x64@1.28.1:
-    resolution: {integrity: sha512-vMnc+7OVCkmlRWQsgYHgUqiBPRIjD8XeoRyApJ07YZzGs7DkRH4LhvmacJbLd3wORylbn6gLz3pQa8J/M61mzg==, registry: https://npm.pkg.st/, tarball: https://registry.npmjs.org/@bufbuild/buf-win32-x64/-/buf-win32-x64-1.28.1.tgz}
-    name: '@bufbuild/buf-win32-x64'
-    version: 1.28.1
-    engines: {node: '>=12'}
-    cpu: [x64]
-    os: [win32]
-    requiresBuild: true
-    dev: false
-    optional: true
-
   registry.npmjs.org/@bufbuild/buf@1.28.1:
     resolution: {integrity: sha512-WRDagrf0uBjfV9s5eyrSPJDcdI4A5Q7JMCA4aMrHRR8fo/TTjniDBjJprszhaguqsDkn/LS4QIu92HVFZCrl9A==, registry: https://npm.pkg.st/, tarball: https://registry.npmjs.org/@bufbuild/buf/-/buf-1.28.1.tgz}
     name: '@bufbuild/buf'
@@ -683,12 +687,12 @@ packages:
     hasBin: true
     requiresBuild: true
     optionalDependencies:
-      '@bufbuild/buf-darwin-arm64': registry.npmjs.org/@bufbuild/buf-darwin-arm64@1.28.1
-      '@bufbuild/buf-darwin-x64': registry.npmjs.org/@bufbuild/buf-darwin-x64@1.28.1
-      '@bufbuild/buf-linux-aarch64': registry.npmjs.org/@bufbuild/buf-linux-aarch64@1.28.1
-      '@bufbuild/buf-linux-x64': registry.npmjs.org/@bufbuild/buf-linux-x64@1.28.1
-      '@bufbuild/buf-win32-arm64': registry.npmjs.org/@bufbuild/buf-win32-arm64@1.28.1
-      '@bufbuild/buf-win32-x64': registry.npmjs.org/@bufbuild/buf-win32-x64@1.28.1
+      '@bufbuild/buf-darwin-arm64': 1.28.1
+      '@bufbuild/buf-darwin-x64': 1.28.1
+      '@bufbuild/buf-linux-aarch64': 1.28.1
+      '@bufbuild/buf-linux-x64': 1.28.1
+      '@bufbuild/buf-win32-arm64': 1.28.1
+      '@bufbuild/buf-win32-x64': 1.28.1
     dev: false
 
   registry.npmjs.org/@bufbuild/protobuf@1.5.0:
@@ -887,7 +891,7 @@ packages:
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
       '@jest/types': registry.npmjs.org/@jest/types@29.6.3
-      '@types/node': registry.npmjs.org/@types/node@20.10.1
+      '@types/node': 20.11.16
       chalk: registry.npmjs.org/chalk@4.1.2
       jest-message-util: registry.npmjs.org/jest-message-util@29.7.0
       jest-util: registry.npmjs.org/jest-util@29.7.0
@@ -910,14 +914,14 @@ packages:
       '@jest/test-result': registry.npmjs.org/@jest/test-result@29.7.0
       '@jest/transform': registry.npmjs.org/@jest/transform@29.7.0
       '@jest/types': registry.npmjs.org/@jest/types@29.6.3
-      '@types/node': registry.npmjs.org/@types/node@20.10.1
+      '@types/node': 20.11.16
       ansi-escapes: registry.npmjs.org/ansi-escapes@4.3.2
       chalk: registry.npmjs.org/chalk@4.1.2
       ci-info: registry.npmjs.org/ci-info@3.9.0
       exit: registry.npmjs.org/exit@0.1.2
       graceful-fs: registry.npmjs.org/graceful-fs@4.2.11
       jest-changed-files: registry.npmjs.org/jest-changed-files@29.7.0
-      jest-config: registry.npmjs.org/jest-config@29.7.0(@types/node@20.10.1)
+      jest-config: registry.npmjs.org/jest-config@29.7.0(@types/node@20.11.16)
       jest-haste-map: registry.npmjs.org/jest-haste-map@29.7.0
       jest-message-util: registry.npmjs.org/jest-message-util@29.7.0
       jest-regex-util: registry.npmjs.org/jest-regex-util@29.6.3
@@ -947,7 +951,7 @@ packages:
     dependencies:
       '@jest/fake-timers': registry.npmjs.org/@jest/fake-timers@29.7.0
       '@jest/types': registry.npmjs.org/@jest/types@29.6.3
-      '@types/node': registry.npmjs.org/@types/node@20.10.1
+      '@types/node': 20.11.16
       jest-mock: registry.npmjs.org/jest-mock@29.7.0
     dev: true
 
@@ -980,7 +984,7 @@ packages:
     dependencies:
       '@jest/types': registry.npmjs.org/@jest/types@29.6.3
       '@sinonjs/fake-timers': registry.npmjs.org/@sinonjs/fake-timers@10.3.0
-      '@types/node': registry.npmjs.org/@types/node@20.10.1
+      '@types/node': 20.11.16
       jest-message-util: registry.npmjs.org/jest-message-util@29.7.0
       jest-mock: registry.npmjs.org/jest-mock@29.7.0
       jest-util: registry.npmjs.org/jest-util@29.7.0
@@ -1017,7 +1021,7 @@ packages:
       '@jest/transform': registry.npmjs.org/@jest/transform@29.7.0
       '@jest/types': registry.npmjs.org/@jest/types@29.6.3
       '@jridgewell/trace-mapping': registry.npmjs.org/@jridgewell/trace-mapping@0.3.20
-      '@types/node': registry.npmjs.org/@types/node@20.10.1
+      '@types/node': 20.11.16
       chalk: registry.npmjs.org/chalk@4.1.2
       collect-v8-coverage: registry.npmjs.org/collect-v8-coverage@1.0.2
       exit: registry.npmjs.org/exit@0.1.2
@@ -1117,7 +1121,7 @@ packages:
       '@jest/schemas': registry.npmjs.org/@jest/schemas@29.6.3
       '@types/istanbul-lib-coverage': registry.npmjs.org/@types/istanbul-lib-coverage@2.0.6
       '@types/istanbul-reports': registry.npmjs.org/@types/istanbul-reports@3.0.4
-      '@types/node': registry.npmjs.org/@types/node@20.10.1
+      '@types/node': 20.11.16
       '@types/yargs': registry.npmjs.org/@types/yargs@17.0.32
       chalk: registry.npmjs.org/chalk@4.1.2
     dev: true
@@ -1570,7 +1574,7 @@ packages:
     name: '@types/graceful-fs'
     version: 4.1.9
     dependencies:
-      '@types/node': registry.npmjs.org/@types/node@20.10.1
+      '@types/node': 20.11.16
     dev: true
 
   registry.npmjs.org/@types/istanbul-lib-coverage@2.0.6:
@@ -1621,15 +1625,8 @@ packages:
     name: '@types/jsonwebtoken'
     version: 9.0.5
     dependencies:
-      '@types/node': registry.npmjs.org/@types/node@20.10.1
+      '@types/node': 20.11.16
     dev: false
-
-  registry.npmjs.org/@types/node@20.10.1:
-    resolution: {integrity: sha512-T2qwhjWwGH81vUEx4EXmBKsTJRXFXNZTL4v0gi01+zyBmCwzE6TyHszqX01m+QHTEq+EZNo13NeJIdEqf+Myrg==, registry: https://npm.pkg.st/, tarball: https://registry.npmjs.org/@types/node/-/node-20.10.1.tgz}
-    name: '@types/node'
-    version: 20.10.1
-    dependencies:
-      undici-types: registry.npmjs.org/undici-types@5.26.5
 
   registry.npmjs.org/@types/semver@7.5.6:
     resolution: {integrity: sha512-dn1l8LaMea/IjDoHNd9J52uBbInB796CDffS6VdIxvqYCPSG0V0DzHp76GpaWnlhg88uYyPbXCDIowa86ybd5A==, registry: https://npm.pkg.st/, tarball: https://registry.npmjs.org/@types/semver/-/semver-7.5.6.tgz}
@@ -2532,7 +2529,7 @@ packages:
     version: 2.0.0
     dev: true
 
-  registry.npmjs.org/create-jest@29.7.0(@types/node@20.10.1):
+  registry.npmjs.org/create-jest@29.7.0(@types/node@20.11.16):
     resolution: {integrity: sha512-Adz2bdH0Vq3F53KEMJOoftQFutWCukm6J24wbPWRO4k1kMY7gS7ds/uoJkNuV8wDCtWWnuwGcJwpWcih+zEW1Q==, registry: https://npm.pkg.st/, tarball: https://registry.npmjs.org/create-jest/-/create-jest-29.7.0.tgz}
     id: registry.npmjs.org/create-jest/29.7.0
     name: create-jest
@@ -2544,7 +2541,7 @@ packages:
       chalk: registry.npmjs.org/chalk@4.1.2
       exit: registry.npmjs.org/exit@0.1.2
       graceful-fs: registry.npmjs.org/graceful-fs@4.2.11
-      jest-config: registry.npmjs.org/jest-config@29.7.0(@types/node@20.10.1)
+      jest-config: registry.npmjs.org/jest-config@29.7.0(@types/node@20.11.16)
       jest-util: registry.npmjs.org/jest-util@29.7.0
       prompts: registry.npmjs.org/prompts@2.4.2
     transitivePeerDependencies:
@@ -3157,7 +3154,7 @@ packages:
       '@typescript-eslint/eslint-plugin': registry.npmjs.org/@typescript-eslint/eslint-plugin@6.13.1(@typescript-eslint/parser@6.13.1)(eslint@8.54.0)(typescript@5.3.2)
       '@typescript-eslint/utils': registry.npmjs.org/@typescript-eslint/utils@5.62.0(eslint@8.54.0)(typescript@5.3.2)
       eslint: registry.npmjs.org/eslint@8.54.0
-      jest: registry.npmjs.org/jest@29.7.0(@types/node@20.10.1)
+      jest: registry.npmjs.org/jest@29.7.0(@types/node@20.11.16)
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -3554,16 +3551,6 @@ packages:
     name: fs.realpath
     version: 1.0.0
     dev: true
-
-  registry.npmjs.org/fsevents@2.3.3:
-    resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==, registry: https://npm.pkg.st/, tarball: https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz}
-    name: fsevents
-    version: 2.3.3
-    engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
-    os: [darwin]
-    requiresBuild: true
-    dev: true
-    optional: true
 
   registry.npmjs.org/function-bind@1.1.2:
     resolution: {integrity: sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA==, registry: https://npm.pkg.st/, tarball: https://registry.npmjs.org/function-bind/-/function-bind-1.1.2.tgz}
@@ -4288,7 +4275,7 @@ packages:
       '@jest/expect': registry.npmjs.org/@jest/expect@29.7.0
       '@jest/test-result': registry.npmjs.org/@jest/test-result@29.7.0
       '@jest/types': registry.npmjs.org/@jest/types@29.6.3
-      '@types/node': registry.npmjs.org/@types/node@20.10.1
+      '@types/node': 20.11.16
       chalk: registry.npmjs.org/chalk@4.1.2
       co: registry.npmjs.org/co@4.6.0
       dedent: registry.npmjs.org/dedent@1.5.1
@@ -4309,7 +4296,7 @@ packages:
       - supports-color
     dev: true
 
-  registry.npmjs.org/jest-cli@29.7.0(@types/node@20.10.1):
+  registry.npmjs.org/jest-cli@29.7.0(@types/node@20.11.16):
     resolution: {integrity: sha512-OVVobw2IubN/GSYsxETi+gOe7Ka59EFMR/twOU3Jb2GnKKeMGJB5SGUUrEz3SFVmJASUdZUzy83sLNNQ2gZslg==, registry: https://npm.pkg.st/, tarball: https://registry.npmjs.org/jest-cli/-/jest-cli-29.7.0.tgz}
     id: registry.npmjs.org/jest-cli/29.7.0
     name: jest-cli
@@ -4326,10 +4313,10 @@ packages:
       '@jest/test-result': registry.npmjs.org/@jest/test-result@29.7.0
       '@jest/types': registry.npmjs.org/@jest/types@29.6.3
       chalk: registry.npmjs.org/chalk@4.1.2
-      create-jest: registry.npmjs.org/create-jest@29.7.0(@types/node@20.10.1)
+      create-jest: registry.npmjs.org/create-jest@29.7.0(@types/node@20.11.16)
       exit: registry.npmjs.org/exit@0.1.2
       import-local: registry.npmjs.org/import-local@3.1.0
-      jest-config: registry.npmjs.org/jest-config@29.7.0(@types/node@20.10.1)
+      jest-config: registry.npmjs.org/jest-config@29.7.0(@types/node@20.11.16)
       jest-util: registry.npmjs.org/jest-util@29.7.0
       jest-validate: registry.npmjs.org/jest-validate@29.7.0
       yargs: registry.npmjs.org/yargs@17.7.2
@@ -4340,7 +4327,7 @@ packages:
       - ts-node
     dev: true
 
-  registry.npmjs.org/jest-config@29.7.0(@types/node@20.10.1):
+  registry.npmjs.org/jest-config@29.7.0(@types/node@20.11.16):
     resolution: {integrity: sha512-uXbpfeQ7R6TZBqI3/TxCU4q4ttk3u0PJeC+E0zbfSoSjq6bJ7buBPxzQPL0ifrkY4DNu4JUdk0ImlBUYi840eQ==, registry: https://npm.pkg.st/, tarball: https://registry.npmjs.org/jest-config/-/jest-config-29.7.0.tgz}
     id: registry.npmjs.org/jest-config/29.7.0
     name: jest-config
@@ -4358,7 +4345,7 @@ packages:
       '@babel/core': registry.npmjs.org/@babel/core@7.23.5
       '@jest/test-sequencer': registry.npmjs.org/@jest/test-sequencer@29.7.0
       '@jest/types': registry.npmjs.org/@jest/types@29.6.3
-      '@types/node': registry.npmjs.org/@types/node@20.10.1
+      '@types/node': 20.11.16
       babel-jest: registry.npmjs.org/babel-jest@29.7.0(@babel/core@7.23.5)
       chalk: registry.npmjs.org/chalk@4.1.2
       ci-info: registry.npmjs.org/ci-info@3.9.0
@@ -4426,7 +4413,7 @@ packages:
       '@jest/environment': registry.npmjs.org/@jest/environment@29.7.0
       '@jest/fake-timers': registry.npmjs.org/@jest/fake-timers@29.7.0
       '@jest/types': registry.npmjs.org/@jest/types@29.6.3
-      '@types/node': registry.npmjs.org/@types/node@20.10.1
+      '@types/node': 20.11.16
       jest-mock: registry.npmjs.org/jest-mock@29.7.0
       jest-util: registry.npmjs.org/jest-util@29.7.0
     dev: true
@@ -4446,7 +4433,7 @@ packages:
     dependencies:
       '@jest/types': registry.npmjs.org/@jest/types@29.6.3
       '@types/graceful-fs': registry.npmjs.org/@types/graceful-fs@4.1.9
-      '@types/node': registry.npmjs.org/@types/node@20.10.1
+      '@types/node': 20.11.16
       anymatch: registry.npmjs.org/anymatch@3.1.3
       fb-watchman: registry.npmjs.org/fb-watchman@2.0.2
       graceful-fs: registry.npmjs.org/graceful-fs@4.2.11
@@ -4456,7 +4443,7 @@ packages:
       micromatch: registry.npmjs.org/micromatch@4.0.5
       walker: registry.npmjs.org/walker@1.0.8
     optionalDependencies:
-      fsevents: registry.npmjs.org/fsevents@2.3.3
+      fsevents: 2.3.3
     dev: true
 
   registry.npmjs.org/jest-leak-detector@29.7.0:
@@ -4505,7 +4492,7 @@ packages:
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
       '@jest/types': registry.npmjs.org/@jest/types@29.6.3
-      '@types/node': registry.npmjs.org/@types/node@20.10.1
+      '@types/node': 20.11.16
       jest-util: registry.npmjs.org/jest-util@29.7.0
     dev: true
 
@@ -4571,7 +4558,7 @@ packages:
       '@jest/test-result': registry.npmjs.org/@jest/test-result@29.7.0
       '@jest/transform': registry.npmjs.org/@jest/transform@29.7.0
       '@jest/types': registry.npmjs.org/@jest/types@29.6.3
-      '@types/node': registry.npmjs.org/@types/node@20.10.1
+      '@types/node': 20.11.16
       chalk: registry.npmjs.org/chalk@4.1.2
       emittery: registry.npmjs.org/emittery@0.13.1
       graceful-fs: registry.npmjs.org/graceful-fs@4.2.11
@@ -4604,7 +4591,7 @@ packages:
       '@jest/test-result': registry.npmjs.org/@jest/test-result@29.7.0
       '@jest/transform': registry.npmjs.org/@jest/transform@29.7.0
       '@jest/types': registry.npmjs.org/@jest/types@29.6.3
-      '@types/node': registry.npmjs.org/@types/node@20.10.1
+      '@types/node': 20.11.16
       chalk: registry.npmjs.org/chalk@4.1.2
       cjs-module-lexer: registry.npmjs.org/cjs-module-lexer@1.2.3
       collect-v8-coverage: registry.npmjs.org/collect-v8-coverage@1.0.2
@@ -4669,7 +4656,7 @@ packages:
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
       '@jest/types': registry.npmjs.org/@jest/types@29.6.3
-      '@types/node': registry.npmjs.org/@types/node@20.10.1
+      '@types/node': 20.11.16
       chalk: registry.npmjs.org/chalk@4.1.2
       ci-info: registry.npmjs.org/ci-info@3.9.0
       graceful-fs: registry.npmjs.org/graceful-fs@4.2.11
@@ -4698,7 +4685,7 @@ packages:
     dependencies:
       '@jest/test-result': registry.npmjs.org/@jest/test-result@29.7.0
       '@jest/types': registry.npmjs.org/@jest/types@29.6.3
-      '@types/node': registry.npmjs.org/@types/node@20.10.1
+      '@types/node': 20.11.16
       ansi-escapes: registry.npmjs.org/ansi-escapes@4.3.2
       chalk: registry.npmjs.org/chalk@4.1.2
       emittery: registry.npmjs.org/emittery@0.13.1
@@ -4712,13 +4699,13 @@ packages:
     version: 29.7.0
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      '@types/node': registry.npmjs.org/@types/node@20.10.1
+      '@types/node': 20.11.16
       jest-util: registry.npmjs.org/jest-util@29.7.0
       merge-stream: registry.npmjs.org/merge-stream@2.0.0
       supports-color: registry.npmjs.org/supports-color@8.1.1
     dev: true
 
-  registry.npmjs.org/jest@29.7.0(@types/node@20.10.1):
+  registry.npmjs.org/jest@29.7.0(@types/node@20.11.16):
     resolution: {integrity: sha512-NIy3oAFp9shda19hy4HK0HRTWKtPJmGdnvywu01nOqNC2vZg+Z+fvJDxpMQA88eb2I9EcafcdjYgsDthnYTvGw==, registry: https://npm.pkg.st/, tarball: https://registry.npmjs.org/jest/-/jest-29.7.0.tgz}
     id: registry.npmjs.org/jest/29.7.0
     name: jest
@@ -4734,7 +4721,7 @@ packages:
       '@jest/core': registry.npmjs.org/@jest/core@29.7.0
       '@jest/types': registry.npmjs.org/@jest/types@29.6.3
       import-local: registry.npmjs.org/import-local@3.1.0
-      jest-cli: registry.npmjs.org/jest-cli@29.7.0(@types/node@20.10.1)
+      jest-cli: registry.npmjs.org/jest-cli@29.7.0(@types/node@20.11.16)
     transitivePeerDependencies:
       - '@types/node'
       - babel-plugin-macros
@@ -6158,7 +6145,7 @@ packages:
       '@babel/core': registry.npmjs.org/@babel/core@7.23.5
       bs-logger: registry.npmjs.org/bs-logger@0.2.6
       fast-json-stable-stringify: registry.npmjs.org/fast-json-stable-stringify@2.1.0
-      jest: registry.npmjs.org/jest@29.7.0(@types/node@20.10.1)
+      jest: registry.npmjs.org/jest@29.7.0(@types/node@20.11.16)
       jest-util: registry.npmjs.org/jest-util@29.7.0
       json5: registry.npmjs.org/json5@2.2.3
       lodash.memoize: registry.npmjs.org/lodash.memoize@4.1.2
@@ -6313,11 +6300,6 @@ packages:
       has-symbols: registry.npmjs.org/has-symbols@1.0.3
       which-boxed-primitive: registry.npmjs.org/which-boxed-primitive@1.0.2
     dev: true
-
-  registry.npmjs.org/undici-types@5.26.5:
-    resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==, registry: https://npm.pkg.st/, tarball: https://registry.npmjs.org/undici-types/-/undici-types-5.26.5.tgz}
-    name: undici-types
-    version: 5.26.5
 
   registry.npmjs.org/undici@5.28.2:
     resolution: {integrity: sha512-wh1pHJHnUeQV5Xa8/kyQhO7WFa8M34l026L5P/+2TYiakvGy5Rdc8jWZVyG7ieht/0WgJLEd3kcU5gKx+6GC8w==, registry: https://npm.pkg.st/, tarball: https://registry.npmjs.org/undici/-/undici-5.28.2.tgz}
