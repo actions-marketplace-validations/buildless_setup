@@ -1,13 +1,24 @@
 import * as core from '@actions/core'
+import * as io from '@actions/io'
+import * as exec from '@actions/exec'
 import { Octokit } from 'octokit'
 import * as toolCache from '@actions/tool-cache'
 import * as github from '@actions/github'
+import * as http from '@actions/http-client'
 import type { BuildlessSetupActionOptions as Options } from './options'
-import { GITHUB_DEFAULT_HEADERS, OS } from './config'
 import { obtainVersion } from './command'
+import { error as sendError } from './diagnostics'
+import {
+  GITHUB_DEFAULT_HEADERS,
+  OS,
+  BUILDLESS_DOWNLOAD_ENDPOINT as downloadBase,
+  BUILDLESS_CLI_ENDPOINT as cliApiBase,
+  httpClient
+} from './config'
 
-const downloadBase = 'https://dl.less.build'
 const downloadPathV1 = 'cli'
+
+const ENABLE_XZ = false
 
 /**
  * Version info resolved for a release of Buildless.
@@ -23,12 +34,38 @@ export type BuildlessVersionInfo = {
   userProvided: boolean
 }
 
+type TargetVariantString =
+  | 'darwin-amd64'
+  | 'darwin-arm64'
+  | 'linux-amd64'
+  | 'windows-amd64'
+  | string
+
+/** Shape of information about a single release variant. */
+interface ReleaseVariantInfo {
+  downloadUrl: URL
+  digestUrl: URL
+  digest?: string
+}
+
+/** Shape of JSON version info for a CLI release. */
+interface ReleaseVersionInfo {
+  version: string
+
+  variants: {
+    [key: TargetVariantString]: ReleaseVariantInfo
+  }
+}
+
 /**
  * Release archive type.
  */
 export enum ArchiveType {
-  // Release is compressed with `gzip`.
+  // Release is a tarball compressed with `gzip`.
   GZIP = 'gzip',
+
+  // Release is a tarball compressed with `xz`.
+  XZ = 'xz',
 
   // Release is compressed with `zip`.
   ZIP = 'zip'
@@ -66,19 +103,28 @@ export interface DownloadedToolInfo {
  *
  * @param version Version we are downloading.
  * @param options Effective options.
+ * @param archiveType Type of archive to download.
  * @return URL and archive type to use.
  */
 function buildDownloadUrl(
   options: Options,
-  version: BuildlessVersionInfo
+  version: BuildlessVersionInfo,
+  archiveType = ArchiveType.GZIP
 ): { url: URL; archiveType: ArchiveType } {
-  let ext = 'tgz'
-  let archiveType = ArchiveType.GZIP
-  /* istanbul ignore next */
-  if (options.os === OS.WINDOWS) {
-    ext = 'zip'
-    archiveType = ArchiveType.ZIP
+  let ext: string
+  switch (archiveType) {
+    case ArchiveType.GZIP:
+      ext = 'tgz'
+      break
+    case ArchiveType.XZ:
+      ext = 'txz'
+      break
+    case ArchiveType.ZIP:
+      ext = 'zip'
+      break
   }
+
+  // fixup: `arm64` -> `aarch64`
   const arch = options.arch.replaceAll('aarch64', 'arm64')
 
   return {
@@ -105,40 +151,60 @@ async function unpackRelease(
   archiveType: ArchiveType,
   options: Options
 ): Promise<string> {
-  let target: string
   try {
     /* istanbul ignore next */
     if (options.os === OS.WINDOWS) {
       core.debug(
         `Extracting as zip on Windows, from: ${archive}, to: ${toolHome}`
       )
-      target = await toolCache.extractZip(archive, toolHome)
+      return await toolCache.extractZip(archive, toolHome)
     } else {
-      switch (archiveType) {
-        // extract as zip
-        /* istanbul ignore next */
-        case ArchiveType.ZIP:
-          core.debug(
-            `Extracting as zip on Unix or Linux, from: ${archive}, to: ${toolHome}`
+      if (archiveType === ArchiveType.ZIP) {
+        core.debug(
+          `Extracting as zip on Unix or Linux, from: ${archive}, to: ${toolHome}`
+        )
+        return await toolCache.extractZip(archive, toolHome)
+      } else if (archiveType === ArchiveType.XZ) {
+        core.debug(
+          `Extracting txz on Unix or Linux, from: ${archive}, to: ${toolHome}`
+        )
+        // decompress with xz, located via `io.where`
+        const xzbin = await io.which('xz', true)
+        if (!xzbin) {
+          console.error(
+            'Failed to find `xz` tool: falling back to gzip archive.'
           )
-          target = await toolCache.extractZip(archive, toolHome)
-          break
+          throw new Error('INVALID_COMPRESSION_TOOL')
+        }
+        // rename it to `.tar.xz` to make xz happy
+        const archiveBasename = archive.replace(/\.txz$/, '')
+        const targetArchive = `${archiveBasename}.tar.xz`
+        core.debug(`Renaming archive: from=${archive} to=${targetArchive}`)
+        await io.mv(archive, targetArchive)
 
-        // extract as tgz
-        case ArchiveType.GZIP:
-          core.debug(
-            `Extracting as tgz on Unix or Linux, from: ${archive}, to: ${toolHome}`
-          )
-          target = await toolCache.extractTar(archive, toolHome)
-          break
+        // call `exec` on `xz` to decompress the tarball in place
+        await exec.exec(xzbin, ['-vd', targetArchive])
+
+        // now we should have a file at `{name}.tar` instead of `{name}.txz`
+        const tarball = `${archiveBasename}.tar`
+        core.debug(`Extracting decompressed tarball: ${tarball}`)
+        return toolCache.extractTar(tarball, toolHome, 'x')
+      } else if (archiveType === ArchiveType.GZIP) {
+        core.debug(
+          `Extracting as tgz on Unix or Linux, from: ${archive}, to: ${toolHome}`
+        )
+        return toolCache.extractTar(archive, toolHome)
       }
     }
   } catch (err) {
+    // report the error
+    await sendError(err)
+
     /* istanbul ignore next */
     core.warning(`Failed to extract Buildless release: ${err}`)
-    target = toolHome
+    core.setFailed('Failed to extract Buildless release')
   }
-  return target
+  throw new Error('RELEASE_EXTRACT_FAILED')
 }
 
 /**
@@ -149,29 +215,62 @@ async function unpackRelease(
 export async function resolveLatestVersion(
   token?: string
 ): Promise<BuildlessVersionInfo> {
-  /* istanbul ignore next */
-  const octokit = token ? github.getOctokit(token) : new Octokit({})
-  core.debug(`Fetching latest CLI releases...`)
-  const latest = await octokit.request(
-    'GET /repos/{owner}/{repo}/releases/latest',
-    {
-      owner: 'buildless',
-      repo: 'cli',
-      headers: GITHUB_DEFAULT_HEADERS
-    }
-  )
+  const githubFallback = async (): Promise<BuildlessVersionInfo> => {
+    /* istanbul ignore next */
+    const octokit = token ? github.getOctokit(token) : new Octokit({})
+    core.debug(`Fetching latest CLI releases...`)
+    const latest = await octokit.request(
+      'GET /repos/{owner}/{repo}/releases/latest',
+      {
+        owner: 'buildless',
+        repo: 'cli',
+        headers: GITHUB_DEFAULT_HEADERS
+      }
+    )
 
-  /* istanbul ignore next */
-  if (!latest) {
-    throw new Error('Failed to fetch the latest Buildless version')
+    /* istanbul ignore next */
+    if (!latest) {
+      throw new Error('Failed to fetch the latest Buildless version')
+    }
+    core.info(`Fetched latest version via GitHub API: ${latest.data.tag_name}`)
+
+    /* istanbul ignore next */
+    const name = latest.data?.name || undefined
+    return {
+      name,
+      tag_name: latest.data.tag_name,
+      userProvided: false
+    }
   }
-  /* istanbul ignore next */
-  const name = latest.data?.name || undefined
-  return {
-    name,
-    tag_name: latest.data.tag_name,
-    userProvided: !!token
+  try {
+    // try downloading first via CLI API
+    const reqHeaders = {
+      [http.Headers.Accept]: http.MediaTypes.ApplicationJson
+    }
+    const jsonObj = await httpClient.getJson<ReleaseVersionInfo>(
+      `${cliApiBase}/version`,
+      reqHeaders
+    )
+    const info = jsonObj.result
+
+    if (jsonObj.statusCode === 200 && info) {
+      core.info(`Fetched latest version via CLI API: ${info.version}`)
+      return {
+        tag_name: info.version,
+        userProvided: false
+      }
+    } else {
+      core.debug(
+        `Failed to fetch latest version via CLI API; got status: ${jsonObj.statusCode}.`
+      )
+    }
+  } catch (err) {
+    const msg = (err as Error)?.message || '(none)'
+    core.debug(
+      `Failed to fetch latest version via CLI API; falling back to Github API. Error: "${msg}".`
+    )
   }
+  return githubFallback()
 }
 
 /**
@@ -184,9 +283,34 @@ async function maybeDownload(
   version: BuildlessVersionInfo,
   options: Options
 ): Promise<BuildlessRelease> {
+  // decide on an archive type
+  let defaultArchiveType = ArchiveType.GZIP // default
+  if (options.os === OS.WINDOWS) {
+    defaultArchiveType = ArchiveType.ZIP
+  }
+
+  if (ENABLE_XZ) {
+    // check for `xz` support, use it if we can, the archives are smaller
+    try {
+      await io.which('xz', true)
+      defaultArchiveType = ArchiveType.XZ
+      core.debug(`Tool 'xz' found; using xz-based archives.`)
+    } catch (err) {
+      /* istanbul ignore next */
+      core.debug(
+        'Tool `xz` is not available on the host system; falling back to gzip archives.'
+      )
+      defaultArchiveType = ArchiveType.GZIP
+    }
+  }
+
   // build download URL, use result from cache or disk
-  const { url, archiveType } = buildDownloadUrl(options, version)
-  core.info(`Installing from URL: ${url} (type: ${archiveType})`)
+  const { url, archiveType } = buildDownloadUrl(
+    options,
+    version,
+    defaultArchiveType
+  )
+  core.debug(`Installing from URL: ${url} (type: ${archiveType})`)
 
   let targetBin = `${options.target}/buildless`
 
@@ -205,18 +329,23 @@ async function maybeDownload(
     toolDir = toolCache.find('buildless', version.tag_name, options.arch)
   } catch (err) {
     /* istanbul ignore next */
-    core.debug(`Failed to locate Buildless in tool cache: ${err}`)
+    core.debug(`Buildless not in tool cache: ${err}`)
+  }
+  if (toolDir) {
+    core.debug(`Buildless found in tool cache: ${toolDir}`)
   }
   /* istanbul ignore next */
-  if (options.cache && toolDir) {
+  if (!options.skip_cache && toolDir) {
     // we have an existing cached copy of buildless
-    core.debug('Caching enabled and cached Buildless release found; using it')
+    core.debug(
+      'Tool caching enabled and cached Buildless release found; using it'
+    )
     binPath = toolDir
   } else {
     /* istanbul ignore next */
-    if (!options.cache) {
+    if (!options.skip_cache) {
       core.debug(
-        'Cache disabled; forcing a fetch of the specified Buildless release'
+        'Tool cache disabled; forcing a fetch of the specified Buildless release'
       )
     } else {
       core.debug('Cache enabled but no hit was found; downloading release')
@@ -228,9 +357,17 @@ async function maybeDownload(
       toolArchive = await toolCache.downloadTool(url.toString())
     } catch (err) {
       /* istanbul ignore next */
-      core.error(`Failed to download Buildless release: ${err}`)
+      core.debug(
+        `Failed to download Buildless release: ${err} (target: ${url})`
+      )
       /* istanbul ignore next */
-      if (err instanceof Error) core.setFailed(err)
+      if (err instanceof Error) {
+        // report the error and fail the run
+        await sendError(err)
+      }
+      core.setFailed(
+        'Failed to download Buildless release at specified version'
+      )
       /* istanbul ignore next */
       throw err
     }
@@ -255,14 +392,12 @@ async function maybeDownload(
 export async function downloadRelease(
   options: Options
 ): Promise<BuildlessRelease> {
-  core.startGroup(
-    `Resolving Buildless release '${options.version || 'latest'}'`
-  )
+  core.info(`Resolving Buildless release '${options.version || 'latest'}'`)
 
   if (options.custom_url) {
     // if we're using a custom URL, download it based on that token
     try {
-      core.debug(`Downloading custom archive: ${options.custom_url}`)
+      core.info(`Downloading custom archive: ${options.custom_url}`)
       const customArchive = await toolCache.downloadTool(options.custom_url)
 
       // sniff archive type from URL
@@ -297,8 +432,13 @@ export async function downloadRelease(
     } catch (err) {
       /* istanbul ignore next */
       core.error(`Failed to download custom release: ${err}`)
+
       /* istanbul ignore next */
-      if (err instanceof Error) core.setFailed(err)
+      if (err instanceof Error) {
+        // report the error and fail the workflow
+        await sendError(err)
+        core.setFailed(err)
+      }
       /* istanbul ignore next */
       throw err
     }
@@ -306,7 +446,7 @@ export async function downloadRelease(
     // resolve applicable version
     let versionInfo: BuildlessVersionInfo
     if (options.version === 'latest') {
-      core.debug('Resolving latest version via GitHub API')
+      core.info('Resolving latest version...')
       versionInfo = await resolveLatestVersion(options.token)
     } else {
       /* istanbul ignore next */

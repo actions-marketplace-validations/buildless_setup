@@ -9,7 +9,7 @@ export enum OptionName {
   OS = 'os',
   ARCH = 'arch',
   EXPORT_PATH = 'export_path',
-  CACHE = 'cache',
+  SKIP_CACHE = 'skip_cache',
   CUSTOM_URL = 'custom_url',
   TOKEN = 'token',
   TENANT = 'tenant',
@@ -52,8 +52,8 @@ export interface BuildlessSetupActionOptions {
   // Directory path where Buildless should be installed; if none is provided, `~/buildless` is used.
   target: string
 
-  // Whether to leverage tool and action caching.
-  cache: boolean
+  // Skips the tool cache (defaults to `false`, meaning the cache is enabled by default).
+  skip_cache: boolean
 
   // Whether to force installation if a copy of Buildless is already installed.
   force: boolean
@@ -89,7 +89,7 @@ const defaultTarget =
  */
 export const defaults: BuildlessSetupActionOptions = {
   version: 'latest',
-  cache: true,
+  skip_cache: false,
   export_path: true,
   force: false,
   agent: true,
@@ -167,8 +167,7 @@ export default function buildOptions(
       // force-normalize the OS and arch
       os: normalizeOs(opts?.os || defaults.os),
       arch: normalizeArch(opts?.arch || defaults.arch),
-      apikey: opts?.apikey || process.env.BUILDLESS_API_KEY || undefined,
-      agent: typeof opts?.agent === 'boolean' ? opts.agent : true
+      apikey: opts?.apikey || process.env.BUILDLESS_API_KEY || undefined
     }
   } satisfies BuildlessSetupActionOptions
 }

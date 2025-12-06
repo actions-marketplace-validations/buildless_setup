@@ -25,8 +25,9 @@
   },
   "scripts": {
     "build": "pnpm run bundle",
+    "release": "pnpm run build && pnpm run sentry:sourcemaps",
     "bundle": "pnpm run format:write && pnpm run package",
-    "ci-test": "jest",
+    "ci-test": "jest --forceExit --coverage",
     "clean": "shx rm -fr dist src/gen",
     "gen": "test -d src/gen || buf generate --include-imports",
     "coverage": "make-coverage-badge --output-path ./badges/coverage.svg",
@@ -34,11 +35,14 @@
     "format:check": "prettier --check **/*.ts",
     "lint": "npx eslint . -c ./.github/linters/.eslintrc.yml",
     "package": "pnpm run gen && concurrently 'pnpm run package:main' 'pnpm run package:cleanup'",
-    "package:main": "ncc build src/index.ts --license licenses.txt",
-    "package:cleanup": "ncc build src/cleanup.ts -o dist/cleanup",
+    "package:main": "ncc build src/index.ts --license licenses.txt --minify --source-map",
+    "package:cleanup": "ncc build src/cleanup.ts -o dist/cleanup --minify --source-map",
     "package:watch": "pnpm run package -- --watch",
-    "test": "jest",
-    "all": "pnpm run format:write && pnpm run lint && pnpm run test && pnpm run coverage && pnpm run package"
+    "test": "jest --runInBand --forceExit --no-watchman --coverage",
+    "test:debug": "jest --runInBand --detectOpenHandles",
+    "all": "pnpm run format:write && pnpm run lint && pnpm run test && pnpm run coverage && pnpm run package",
+    "commitlint": "commitlint --edit",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org elide --project buildless-setup ./dist && sentry-cli sourcemaps upload --org elide --project buildless-setup ./dist"
   },
   "license": "MIT",
   "jestSonar": {},
@@ -59,6 +63,9 @@
         "statements": 0
       }
     },
+    "coveragePathIgnorePatterns": [
+      "src/gen"
+    ],
     "moduleFileExtensions": [
       "js",
       "ts"
@@ -84,41 +91,52 @@
     ]
   },
   "dependencies": {
+    "@actions/cache": "^3.2.2",
     "@actions/core": "^1.10.1",
     "@actions/exec": "^1.1.1",
     "@actions/github": "^6.0.0",
+    "@actions/http-client": "^2.2.0",
     "@actions/io": "^1.1.3",
     "@actions/tool-cache": "^2.0.1",
-    "@bufbuild/buf": "^1.28.1",
-    "@bufbuild/protobuf": "^1.5.0",
-    "@bufbuild/protoc-gen-es": "^1.5.0",
-    "@connectrpc/connect": "^1.1.3",
-    "@connectrpc/protoc-gen-connect-es": "^1.1.3",
-    "octokit": "^3.1.2"
+    "@bufbuild/buf": "^1.30.0",
+    "@bufbuild/protobuf": "^1.7.1",
+    "@bufbuild/protoc-gen-es": "^1.7.1",
+    "@connectrpc/connect": "^1.1.4",
+    "@connectrpc/protoc-gen-connect-es": "^1.1.4",
+    "@sentry/node": "^7.90.0",
+    "octokit": "^3.1.2",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "@connectrpc/connect-node": "^1.1.3",
-    "@types/jest": "^29.5.10",
-    "@types/node": "^20.10.0",
-    "@typescript-eslint/eslint-plugin": "^6.12.0",
-    "@typescript-eslint/parser": "^6.12.0",
+    "@commitlint/cli": "^18.4.3",
+    "@commitlint/config-conventional": "^18.5.0",
+    "@connectrpc/connect-node": "^1.1.4",
+    "@jest/globals": "^29.7.0",
+    "@sentry/cli": "^2.25.0",
+    "@sentry/types": "^7.107.0",
+    "@types/jest": "^29.5.11",
+    "@types/node": "^20.10.6",
+    "@types/uuid": "^9.0.7",
+    "@typescript-eslint/eslint-plugin": "^6.18.0",
+    "@typescript-eslint/parser": "^6.19.0",
     "@vercel/ncc": "^0.38.1",
     "concurrently": "^8.2.2",
-    "eslint": "^8.54.0",
+    "eslint": "^8.55.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-github": "^4.10.1",
-    "eslint-plugin-import": "^2.29.0",
-    "eslint-plugin-jest": "^27.6.0",
-    "eslint-plugin-jsonc": "^2.10.0",
-    "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jest": "^27.6.3",
+    "eslint-plugin-jsonc": "^2.12.2",
+    "eslint-plugin-prettier": "^5.1.2",
+    "husky": "^8.0.3",
     "jest": "^29.7.0",
     "jest-sonar-reporter": "^2.0.0",
     "make-coverage-badge": "^1.2.0",
-    "prettier": "^3.1.0",
+    "prettier": "^3.2.2",
     "prettier-eslint": "^16.1.2",
     "shx": "^0.3.4",
     "ts-jest": "^29.1.1",
-    "typescript": "^5.3.2"
+    "typescript": "^5.3.3"
   },
   "commitlint": {
     "extends": [

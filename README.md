@@ -1,7 +1,10 @@
 
 # GitHub Action: Setup Buildless
 
+![Latest Release](https://img.shields.io/github/v/release/buildless/setup)
 [![CI](https://github.com/buildless/setup-buildless/actions/workflows/ci.yml/badge.svg)](https://github.com/buildless/setup-buildless/actions/workflows/ci.yml)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=buildless_setup&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=buildless_setup)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=buildless_setup&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=buildless_setup)
 
 This repository provides a [GitHub Action][0] to setup [Buildless][1] within your workflows. Supported features:
 
@@ -10,16 +13,18 @@ This repository provides a [GitHub Action][0] to setup [Buildless][1] within you
 
 ## Usage
 
+> [Full documentation here](https://docs.less.build/docs/github-actions)
+
 **Install the latest Buildless CLI, add it to the `PATH`, and run the agent**
 ```yaml
   - name: "Setup: Buildless"
-    uses: buildless/setup-buildless@v1
+    uses: buildless/setup@v1.0.2
 ```
 
 **Install the latest Buildless CLI, add it to the `PATH`, without the agent:**
 ```yaml
   - name: "Setup: Buildless"
-    uses: buildless/setup-buildless@v1
+    uses: buildless/setup@v1.0.2
     with:
       agent: false  # you really should use the agent tho
 ```
@@ -41,7 +46,7 @@ The full suite of available options are below.
 | `os`          | `string`     | (Current)                      | OS to target; defaults to current platform   |
 | `arch`        | `string`     | (Current)                      | Arch to target; defaults to current platform |
 | `agent`       | `boolean`    | `true`                         | Install and start the Buildless Agent        |
-| `apikey`      | `string`     | `${{ env.BUILDLESS_API_KEY }}` | Perform a self-test after installing         |
+| `apikey`      | `string`     | `${{ env.BUILDLESS_APIKEY }}`  | Explicitly set an API key                    |
 | `token`       | `string`     | `${{ env.GITHUB_TOKEN }}`      | GitHub token to use for fetching assets      |
 | `export_path` | `boolean`    | `true`                         | Whether to install Buildless onto the `PATH` |
 
@@ -57,7 +62,7 @@ The full suite of available options are below.
 **Full configuration sample with defaults**
 ```yaml
   - name: "Setup: Buildless"
-    uses: buildless/setup-buildless@v1
+    uses: buildless/setup@v1
     with:
       version: latest
       os: linux
